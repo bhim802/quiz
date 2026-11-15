@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.belajar.quiz.model.AnswerResult;
 import com.belajar.quiz.model.Question;
+import com.belajar.quiz.model.QuestionResponse;
 
 @Service
 public class QuestionService {
@@ -17,11 +18,15 @@ public class QuestionService {
             new Question(1L, "Apa bahasa Inggris dari 'kucing'?", "Dog", "Cat", "Bird", "Fish", "B"),
             new Question(2L, "Apa bahasa Inggris dari 'makan'?", "Eat", "Drink", "Sleep", "Run", "A")));
 
-    public List<Question> getAll() {
-        return questions;
+    public List<QuestionResponse> getAll() {
+        return questions.stream().map(QuestionResponse::new).toList();
     }
 
-    public Question getById(Long id) {
+    public QuestionResponse getById(Long id) {
+        return new QuestionResponse(findById(id));
+    }
+
+    private Question findById(Long id) {
         return questions.stream()
                 .filter(q -> q.getId().equals(id))
                 .findFirst()
@@ -29,7 +34,7 @@ public class QuestionService {
     }
 
     public AnswerResult checkAnswer(Long id, String selectedOption) {
-        Question q = getById(id);
+        Question q = findById(id);
         boolean correct = q.getCorrectOption().equalsIgnoreCase(selectedOption);
         return new AnswerResult(correct, q.getCorrectOption());
     }

@@ -10,5 +10,5 @@ public class AnswerResult {
     }
 
     public boolean isCorrect() {return correct;}
-    public String isCorrectOption() {return correctOption;}
+    public String getCorrectOption() {return correctOption;}
 }
